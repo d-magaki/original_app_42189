@@ -24,7 +24,9 @@
           <span class="navbar-text">
             ようこそ、<%= current_user.user_name %> さん！ (社員ID: <%= current_user.employee_id %>)
           </span>
-          <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "btn btn-danger ml-3" %>
+          <%= button_to "ログアウト", destroy_user_session_path, method: :delete %>
+          <%= link_to "ユーザー一覧", users_path, class: "btn btn-secondary ml-3" %>
+
         <% else %>
           <%= link_to "ログイン", new_user_session_path, class: "btn btn-primary" %>
           <%= link_to "新規登録", new_user_registration_path, class: "btn btn-success ml-2" %>
