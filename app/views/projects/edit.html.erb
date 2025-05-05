@@ -1,0 +1,86 @@
+<h1 class="text-center">案件を編集</h1>
+
+<div class="container">
+  <%= form_with model: @project, url: project_path(@project), method: :patch do |f| %>
+
+    <div class="form-group">
+      <%= f.label :customer_name, "顧客名" %>
+      <%= f.text_field :customer_name, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :sales_office, "営業拠点" %>
+      <%= f.text_field :sales_office, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :sales_representative, "営業担当" %>
+      <%= f.text_field :sales_representative, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :request_type, "依頼区分" %>
+      <%= f.select :request_type, Project.request_types.keys, {}, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :request_content, "依頼内容" %>
+      <%= f.select :request_content, Project.request_contents.keys, {}, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :order_date, "受注日" %>
+      <%= f.text_field :order_date, class: "form-control", id: "order_date" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :due_date, "納期" %>
+      <%= f.text_field :due_date, class: "form-control", id: "due_date" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :revenue, "売上" %>
+      <%= f.number_field :revenue, class: "form-control", id: "revenue", step: 1000, min: 0, onchange: "calculateProfit()" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :cost, "コスト" %>
+      <%= f.number_field :cost, class: "form-control", id: "cost", step: 1000, min: 0, onchange: "calculateProfit()" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :profit, "利益" %>
+      <%= f.number_field :profit, class: "form-control", id: "profit", readonly: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :attachments, "添付資料 (追加する場合はファイルを選択)" %>
+      <%= f.file_field :attachments, multiple: true, class: "form-control" %>
+    </div>
+
+      <% if @project.attachments.attached? %>
+        <h2>現在の添付資料</h2>
+        <p>削除する場合はチェックを付ける</p> <!-- 添付ファイルがあるときのみ表示 -->
+
+        <% @project.attachments.each do |attachment| %>
+          <div class="d-flex align-items-center">
+            <%= check_box_tag "delete_attachments[]", attachment.id, false, class: "mx-2" %>
+            <%= link_to attachment.filename, rails_blob_url(attachment), target: "_blank", class: "btn btn-link" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p>添付ファイルはありません。</p>
+      <% end %>
+
+    <div class="form-group">
+      <%= f.label :remarks, "備考" %>
+      <%= f.text_area :remarks, class: "form-control" %>
+    </div>
+
+    <%= f.submit "更新する", class: "btn btn-success mt-4" %>
+  <% end %>
+
+  <div class="text-center mt-3">
+    <%= link_to "キャンセル", project_path(@project), class: "btn btn-secondary" %>
+  </div>
+</div>

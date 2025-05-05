@@ -24,8 +24,8 @@
           <td><%= project.customer_name %></td>
           <td><%= project.sales_office %></td>
           <td><%= project.sales_representative %></td>
-          <td><%= Project.request_types[project.request_type] %></td>
-          <td><%= Project.request_contents[project.request_content] %></td>
+          <td><%= Project.request_types.key(project.request_type.to_i) || "未設定" %>
+          <td><%= Project.request_contents.key(project.request_content.to_i) || "未設定" %></td>
           <td><%= project.order_date %></td>
           <td><%= project.due_date %></td>
           <td><%= project.revenue %></td>
