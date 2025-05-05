@@ -1,6 +1,6 @@
 <div class="container">
   <h2>新規登録</h2>
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :post }) do |f| %>
+  <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), local: true do |f| %>
     <div class="form-group">
       <%= f.label :employee_id, "ユーザーID" %>
       <%= f.text_field :employee_id, class: "form-control", required: true %>
