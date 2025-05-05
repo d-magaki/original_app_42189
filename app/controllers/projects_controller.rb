@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :delete_attachment]
+  before_action :set_project, only: [:show, :edit, :update, :destroy, :delete_attachment]
 
   def index
     @projects = Project.all
@@ -43,6 +43,19 @@ class ProjectsController < ApplicationController
       redirect_to @project, notice: "案件情報を更新しました！"
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @project = Project.find(params[:id])
+  
+    begin
+      @project.attachments.each(&:purge) if @project.attachments.attached? # 添付ファイルを削除
+      @project.destroy! # 例外を発生させることで、エラーハンドリングを適用
+      redirect_to projects_path, notice: "案件を削除しました！"
+    rescue ActiveRecord::RecordNotDestroyed => e
+      Rails.logger.error "削除に失敗しました: #{e.message}"
+      redirect_to project_path(@project), alert: "案件の削除に失敗しました。"
     end
   end
 
