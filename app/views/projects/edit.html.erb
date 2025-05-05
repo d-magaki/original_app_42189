@@ -84,3 +84,12 @@
     <%= link_to "キャンセル", project_path(@project), class: "btn btn-secondary" %>
   </div>
 </div>
+
+<!-- 利益自動計算用の JavaScript -->
+<script>
+function calculateProfit() {
+  var revenue = document.getElementById("revenue").value;
+  var cost = document.getElementById("cost").value;
+  document.getElementById("profit").value = revenue - cost;
+}
+</script>

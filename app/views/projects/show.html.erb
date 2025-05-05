@@ -28,7 +28,8 @@
 
 
   <div class="text-center mt-4">
-    <%= link_to "【編集する】", edit_project_path(@project), class: "btn btn-warning btn-lg" %>
+    <%= link_to "編集", edit_project_path(@project), class: "btn btn-warning btn-lg" %>
+    <%= button_to "削除", project_path(@project), method: :delete, class: "btn btn-danger btn-lg", data: { confirm: "本当に削除しますか？" } %>
     <%= link_to "案件一覧へ戻る", projects_path, class: "btn btn-primary" %>
   </div>
 </div>
