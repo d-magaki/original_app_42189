@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :users, only: [:index, :show, :edit, :update, :destroy]
+  resources :users, only: [:index, :show, :edit, :update, :destroy] do
+    collection do
+      get :find_by_employee_id
+    end
+  end
 
   resources :tasks, only: [:index, :show, :edit, :update, :destroy]
   

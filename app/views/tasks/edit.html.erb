@@ -1,0 +1,70 @@
+<h2>タスク編集</h2>
+
+<%= form_with(model: @task, url: task_path(@task.task_id), method: :patch, local: true, id: "taskForm") do |f| %>
+  <table class="table">
+    <tr><th>案件ID</th><td><%= @task.task_id %></td></tr>
+    <tr><th>顧客名</th><td><%= @task.customer_name %></td></tr>
+    <tr><th>備考</th><td><%= f.text_area :notes, class: "form-control" %></td></tr>
+
+    <tr><th>添付資料 (追加)</th><td><%= f.file_field :attachments, multiple: true, class: "form-control" %></td></tr>
+
+    <% if @task.attachment.present? %>
+      <tr><th>現在の添付資料</th>
+        <td>
+          <p>削除する場合はチェックを付ける</p>
+          <% @task.attachment.each do |file| %>
+            <div class="d-flex align-items-center">
+              <%= check_box_tag "delete_attachments[]", file.id, false, class: "mx-2" %>
+              <%= link_to file.filename, rails_blob_url(file), target: "_blank", class: "btn btn-link" %>
+            </div>
+          <% end %>
+        </td>
+      </tr>
+    <% else %>
+      <tr><th>現在の添付資料</th><td>添付ファイルはありません。</td></tr>
+    <% end %>
+
+    <tr><th>社員ID</th>
+      <td>
+        <%= f.text_field :employee_id, class: "form-control", id: "employee_id" %>
+      </td>
+    </tr>
+    <tr><th>担当者</th><td><%= f.text_field :assigned_person, class: "form-control", id: "assigned_person", readonly: true %></td></tr>
+    <tr><th>部署名</th><td><%= f.text_field :department_name, class: "form-control", id: "department_name", readonly: true %></td></tr>
+
+    <tr><th>計画開始日</th><td><%= f.text_field :planning_start_date, class: "form-control", id: "planning_start_date" %></td></tr>
+    <tr><th>計画完了日</th><td><%= f.text_field :planning_end_date, class: "form-control", id: "planning_end_date" %></td></tr>
+    <tr><th>デザイン開始日</th><td><%= f.text_field :design_start_date, class: "form-control", id: "design_start_date" %></td></tr>
+    <tr><th>デザイン完了日</th><td><%= f.text_field :design_end_date, class: "form-control", id: "design_end_date" %></td></tr>
+    <tr><th>開発開始日</th><td><%= f.text_field :development_start_date, class: "form-control", id: "development_start_date" %></td></tr>
+    <tr><th>開発完了日</th><td><%= f.text_field :development_end_date, class: "form-control", id: "development_end_date" %></td></tr>
+
+    <tr><th>作業ステータス</th><td><%= f.select :status, Project::STATUSES.keys, {}, class: "form-control" %></td></tr>
+
+  </table>
+
+  <div class="mt-3">
+    <%= f.submit "更新", class: "btn btn-primary" %>
+    <%= link_to "キャンセル", task_path(@task.task_id), class: "btn btn-secondary" %>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  flatpickr("#planning_start_date, #planning_end_date, #design_start_date, #design_end_date, #development_start_date, #development_end_date", { dateFormat: "Y-m-d" });
+
+  document.getElementById("employee_id").addEventListener("change", function() {
+    let employeeId = this.value;
+
+    fetch(`/users/find_by_employee_id?employee_id=${employeeId}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data) {
+          document.getElementById("assigned_person").value = data.user_name || "未設定";
+          document.getElementById("department_name").value = data.department || "未設定";
+        }
+      })
+      .catch(error => console.error("エラー:", error));
+  });
+});
+</script>

@@ -13,7 +13,7 @@ class Project < ApplicationRecord
 
   REQUEST_TYPES = { 新規依頼: 0, 修正依頼: 1, 追加依頼: 2, バグ修正: 3, その他: 4 }
   REQUEST_CONTENTS = { WEBアプリ制作: 0, WEBデザイン制作: 1, スマホアプリ制作: 2, システム構築: 3, データ解析: 4, その他: 5 }
-
+  STATUSES = { "未着手" => 0, "進行中" => 1, "完了" => 2 }.freeze
   # クラスメソッドとして定義
   def self.request_types
     REQUEST_TYPES
@@ -21,6 +21,10 @@ class Project < ApplicationRecord
 
   def self.request_contents
     REQUEST_CONTENTS
+  end
+
+  def self.statuses
+    STATUSES
   end
 
   before_save :calculate_profit
