@@ -34,7 +34,13 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
+  # ActiveStorage のストレージサービスを設定
   config.active_storage.service = :local
+
+  # ActiveStorage の URL オプションを設定
+  config.active_storage.service_urls_expire_in = 1.hour
+  config.active_storage.routes_prefix = "/rails/active_storage"
+  config.active_storage.url_options = { host: "http://localhost:3000" }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
