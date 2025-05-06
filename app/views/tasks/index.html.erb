@@ -3,6 +3,7 @@
 <table class="table table-hover">
   <thead>
     <tr>
+      <th>案件ID</th>
       <th>顧客名</th>
       <th>受注日</th>
       <th>納期</th>
@@ -16,6 +17,7 @@
   <tbody>
   <% @tasks.each_with_index do |task, index| %>
     <tr ondblclick="window.location.href='<%= project_path(Project.all[index].id) %>'">
+      <td><%= task.task_id %></td>
       <td><%= task.customer_name %></td>
       <td><%= task.order_date %></td>
       <td><%= task.due_date %></td>
@@ -32,7 +34,7 @@
   <% end %>
 </td>
       <td><%= task.notes.present? ? task.notes : "なし" %></td> <!-- 🔹 NULL対策 -->
-      <td><%= task.status == 0 ? "未着手" : task.status %></td>
+      <td><%= task.status.present? ? task.status : "未設定" %></td> <!-- 🔹 `nil` の場合は `未設定` を表示 -->
     </tr>
   <% end %>
   </tbody>

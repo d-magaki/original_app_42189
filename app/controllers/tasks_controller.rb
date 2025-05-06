@@ -2,6 +2,7 @@ class TasksController < ApplicationController
   def index
     @tasks = Project.all.map do |project|
       Task.new(
+        task_id: project.id,
         customer_name: project.customer_name,
         order_date: project.order_date,
         due_date: project.due_date,
@@ -9,7 +10,7 @@ class TasksController < ApplicationController
         request_content: Project::REQUEST_CONTENTS.key(project.request_content) || "未設定",
         attachment: project.attachments,
         notes: project.remarks,
-        status: project.status || "未着手"
+        status: nil
       )
     end
   end
