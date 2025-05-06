@@ -1,0 +1,39 @@
+<h2>タスク一覧</h2>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>顧客名</th>
+      <th>受注日</th>
+      <th>納期</th>
+      <th>依頼区分</th>
+      <th>依頼内容</th>
+      <th>添付資料</th>
+      <th>備考</th>
+      <th>作業ステータス</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @tasks.each_with_index do |task, index| %>
+    <tr ondblclick="window.location.href='<%= project_path(Project.all[index].id) %>'">
+      <td><%= task.customer_name %></td>
+      <td><%= task.order_date %></td>
+      <td><%= task.due_date %></td>
+      <td><%= task.request_type == 0 ? "未設定" : task.request_type %></td>
+      <td><%= task.request_content == 0 ? "未設定" : task.request_content %></td>
+<td>
+  <% project = Project.all[index] %>
+  <% if project.attachments.attached? %>
+    <% project.attachments.each do |file| %>
+      <%= link_to file.filename.to_s, rails_blob_path(file, disposition: "inline"), target: "_blank" %><br> <!-- 🔹 `inline` に修正 -->
+    <% end %>
+  <% else %>
+    なし
+  <% end %>
+</td>
+      <td><%= task.notes.present? ? task.notes : "なし" %></td> <!-- 🔹 NULL対策 -->
+      <td><%= task.status == 0 ? "未着手" : task.status %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
